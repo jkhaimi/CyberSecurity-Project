@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Jesse's Messanger</title>
+    </head>
+
+
+    <body style="text-align: center;">
+		<h1>Welcome to Jesse's Messanger</h1>
+
+		<p><strong>Welcome</strong> {{user.username}}</p>
+	
+
+
+        <form action='logout/' method="POST">
+			{% csrf_token %}
+            <input type="submit" value="Logout"/>
+        </form>
+		
+        <h2>Your Messages</h2>
+
+        {% for msg in msgs %}
+        <div style="border: 1px solid black; margin-bottom: 50px;">
+            <i>From {{ msg.source.username }} to {{ msg.target.username }}</i>
+            <p>{{ msg.content|safe }}</p>
+            <form action="{% url 'delete_message' message_id=msg.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this message?');">
+                {% csrf_token %}
+                <button type="submit">Delete Message</button>
+            </form>
+        </div>
+    {% endfor %}
+    
+    
+        <h2>Send a Message</h2>
+
+        <form action='add/' method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            Who do you want the message to?
+            <br>
+            <select name="to">
+            {% for user in users %}
+                <option style="margin-top: 10px;" value="{{user.username}}">{{user.username}}</option>
+            {% endfor %}
+            </select><br/>
+            <br>
+
+			<textarea name="content" cols="40" rows="5"></textarea><br/>
+            <input type="submit" value="Send"/>
+        </form>
+    </body>
+</html>
+
+<!-- FLAW 5: CSRF-tokens
+
+CSRF-tokens are not listed on the OWASP 'Top 10 Web Application Security Risks' list because frameworks are more secure nowdays. 
+Django for example requieres to use a CSRF-token on post-methods, without one the user gets an error. 
+
+It is impossible to show what a post method would look like without one, because without it the post-method will not work. 
+I will show where and how the token is implemented into this file.
+Here is the post-method to adding messages to the server and displaying them. 
+
+        <form action='add/' method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            Who do you want the message to?
+            <br>
+            <select name="to">
+            {% for user in users %}
+                <option style="margin-top: 10px;" value="{{user.username}}">{{user.username}}</option>
+            {% endfor %}
+            </select><br/>
+            <br>
+
+			<textarea name="content" cols="40" rows="5"></textarea><br/>
+            <input type="submit" value="Send"/>
+        </form>
+
+As we can see on row 63 we have the {% csrf_token %} . This makes sure that CSRF attacks are impossible.
+In this form the line generates a hidden input field containing a unique token. 
+This token is validated by Django's CSRF middleware when the form is submitted.
+If the token is missing or invalid, the request is rejected, preventing potential CSRF attacks.
+This was an example of the CSRF flaw. ->
+
+
