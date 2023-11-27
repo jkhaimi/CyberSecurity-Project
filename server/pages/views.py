@@ -14,7 +14,7 @@ def mailView(request):
 
 	# The solution to this flaw is to sanitize and validate the received content before storing it. 
 	# We can do this by adding a length limit to the content. 
-	# We can do this for example adding a new variable named sanitized_content before line 13.
+	# We can do this for example adding a new variable named sanitized_content before we create the Mail objects.
 	# Which would look like this: 
 
 	# sanitized_content = request.body.decode('utf-8')[:255]
@@ -27,11 +27,11 @@ def mailView(request):
 	# And then we can print it and return it. This was an example of the injection flaw.
 	# Here is what the code should look like to avoid possible injections:
 
-def mailView(request):
-    sanitized_content = request.body.decode('utf-8')[:255]
-    Mail.objects.create(content=sanitized_content)
-    print(sanitized_content)
-    return HttpResponse('')
+# def mailView(request):
+#     sanitized_content = request.body.decode('utf-8')[:255]
+#     Mail.objects.create(content=sanitized_content)
+#     print(sanitized_content)
+#     return HttpResponse('')
 
 
 
@@ -39,8 +39,7 @@ def mailView(request):
 # FLAW 1-2: Lack of input validation and sanitation in addView
 @login_required
 def addView(request):
-    # No validation for 'to' and 'content' parameters
-    target = User.objects.get(username=request.POST.get('to'))  # Vulnerable to query manipulation
+    target = User.objects.get(username=request.POST.get('to'))
     Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
     return redirect('/')
 
@@ -56,18 +55,18 @@ def addView(request):
 		# This was the second part of the example of the injection flaw. Here is what the code should look like to avoid the possible injenctions:
 
 
-@login_required
-def addView(request):
-    target_username = request.POST.get('to')
-    content = request.POST.get('content')
+# @login_required
+# def addView(request):
+#     target_username = request.POST.get('to')
+#     content = request.POST.get('content')
     
-    if target_username and len(content) <= 255:
-        try:
-            target = User.objects.get(username=target_username)
-            Message.objects.create(source=request.user, target=target, content=content)
-        except User.DoesNotExist:
-            pass 
-    return redirect('/')
+#     if target_username and len(content) <= 255:
+#         try:
+#             target = User.objects.get(username=target_username)
+#             Message.objects.create(source=request.user, target=target, content=content)
+#         except User.DoesNotExist:
+#             pass 
+#     return redirect('/')
 
 
 
@@ -91,11 +90,13 @@ def homePageView(request):
 	# Here is how the code should look like to avoid this flaw:
 
 
-@login_required
-def homePageView(request):
-    messages = Message.objects.filter(Q(source=request.user) | Q(target=request.user))
-    users = User.objects.exclude(pk=request.user.id) 
-    return render(request, 'pages/index.html', {'msgs': messages, 'users': users})
+# @login_required
+# def homePageView(request):
+#     messages = Message.objects.filter(Q(source=request.user) | Q(target=request.user))
+#     users = User.objects.exclude(pk=request.user.id) 
+#     return render(request, 'pages/index.html', {'msgs': messages, 'users': users})
+
+
 
 
 # FLAW 3: Vulnerability to XSS attacks
@@ -112,19 +113,20 @@ def homePageView(request):
 # Now the all the messages are displayed as plain text even if they have code executable code in them. And like this we prevent XSS attacks.
 # This was an example of the Cross-Site Scripting flaw. Here is how the code should look like after implementing protection for both flaws 2 and 3:
 
-from django.utils.html import escape
+# from django.utils.html import escape
 
-@login_required
-def homePageView(request):
-    messages = Message.objects.filter(Q(source=request.user) | Q(target=request.user))
-    sanitized_messages = []
+# @login_required
+# def homePageView(request):
+#     messages = Message.objects.filter(Q(source=request.user) | Q(target=request.user))
+#     sanitized_messages = []
 
-    for msg in messages:
-        msg.content = escape(msg.content)
-        sanitized_messages.append(msg)
+#     for msg in messages:
+#         msg.content = escape(msg.content)
+#         sanitized_messages.append(msg)
 
-    users = User.objects.exclude(pk=request.user.id) 
-    return render(request, 'pages/index.html', {'msgs': sanitized_messages, 'users': users})
+#     users = User.objects.exclude(pk=request.user.id) 
+#     return render(request, 'pages/index.html', {'msgs': sanitized_messages, 'users': users})
+
 
 
 from django.shortcuts import redirect, get_object_or_404
