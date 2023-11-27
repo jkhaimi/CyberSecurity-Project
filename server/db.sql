@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS "auth_group_permissions" ("id" integer NOT NULL PRIMA
 CREATE TABLE IF NOT EXISTS "auth_user_groups" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "group_id" integer NOT NULL REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "auth_user_user_permissions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "permission_id" integer NOT NULL REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "django_admin_log" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "action_time" datetime NOT NULL, "object_id" text NULL, "object_repr" varchar(200) NOT NULL, "change_message" text NOT NULL, "content_type_id" integer NULL REFERENCES "django_content_type" ("id") DEFERRABLE INITIALLY DEFERRED, "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "action_flag" smallint unsigned NOT NULL CHECK ("action_flag" >= 0));
-INSERT INTO django_admin_log VALUES(1,'2020-07-18 23:04:45.166732','2','bob','[{"added": {}}]',4,1,1);
-INSERT INTO django_admin_log VALUES(2,'2020-07-18 23:04:56.129900','3','alice','[{"added": {}}]',4,1,1);
+INSERT INTO django_admin_log VALUES(1,'2020-07-18 23:04:45.166732','2','matti','[{"added": {}}]',4,1,1);
+INSERT INTO django_admin_log VALUES(2,'2020-07-18 23:04:56.129900','3','teppo','[{"added": {}}]',4,1,1);
 
 CREATE TABLE IF NOT EXISTS "django_content_type" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app_label" varchar(100) NOT NULL, "model" varchar(100) NOT NULL);
 INSERT INTO django_content_type VALUES(1,'admin','logentry');
@@ -74,11 +74,11 @@ CREATE TABLE IF NOT EXISTS "pages_mail" ("id" integer NOT NULL PRIMARY KEY AUTOI
 CREATE TABLE IF NOT EXISTS "pages_message" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "content" text NOT NULL, "time" datetime NOT NULL, "source_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED, "target_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED);
 CREATE TABLE IF NOT EXISTS "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" datetime NOT NULL);
 CREATE TABLE IF NOT EXISTS "auth_user" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "password" varchar(128) NOT NULL, "last_login" datetime NULL, "is_superuser" bool NOT NULL, "username" varchar(150) NOT NULL UNIQUE, "last_name" varchar(150) NOT NULL, "email" varchar(254) NOT NULL, "is_staff" bool NOT NULL, "is_active" bool NOT NULL, "date_joined" datetime NOT NULL, "first_name" varchar(150) NOT NULL);
-INSERT INTO auth_user VALUES(1,'pbkdf2_sha256$180000$TBOH2yAWx4qE$F586qFabIZ/etSV5K53EK0aLKv3dFRNhEVCUO+QmDQA=','2020-07-18 23:04:23.403371',1,'admin','','admin@admin.gov',1,1,'2020-07-18 23:03:36.127494','');
-INSERT INTO auth_user VALUES(2,'pbkdf2_sha256$180000$aaWhCT3CauGc$tlkGWtghox6+oHaDY4MXTaZYJJXWFhsoGyJAqRhc/uc=','2020-07-18 23:05:32.676729',0,'bob','','',0,1,'2020-07-18 23:04:45.060969','');
-INSERT INTO auth_user VALUES(3,'pbkdf2_sha256$180000$0SeOG8geIg2K$GoBx2OHi5IE8yAmWBPxu77SaINCL9VnBuf+Z6vsztcE=','2020-07-18 23:05:23.742153',0,'alice','','',0,1,'2020-07-18 23:04:56.025654','');
+INSERT INTO auth_user VALUES(1,'pbkdf2_sha256$180000$TBOH2yAWx4qE$F586qFabIZ/etSV5K53EK0aLKv3dFRNhEVCUO+QmDQA=','2023-11-23 23:04:56.403371',1,'admin','','',1,1,'2020-07-18 23:03:36.127494','');
+INSERT INTO auth_user VALUES(2,'pbkdf2_sha256$180000$aaWhCT3CauGc$tlkGWtghox6+oHaDY4MXTaZYJJXWFhsoGyJAqRhc/uc=','2023-11-23 23:04:56.403371',0,'matti','','',0,1,'2020-07-18 23:04:45.060969','');
+INSERT INTO auth_user VALUES(3,'pbkdf2_sha256$180000$0SeOG8geIg2K$GoBx2OHi5IE8yAmWBPxu77SaINCL9VnBuf+Z6vsztcE=','2023-11-23 23:04:56.403371',0,'teppo','','',0,1,'2020-07-18 23:04:56.025654','');
 
-INSERT INTO auth_user VALUES(4,'kissa','2023-11-23 12:35:11.851045',0,'Jesse','Haimi','jesse.haimi@icloud.com',1,1,'2020-07-18 23:04:56.025654','Jesse');
+INSERT INTO auth_user VALUES(4,'kissa','2023-11-23 23:04:56.403371',0,'jesse','','',0,1,'2020-07-18 23:04:56.025654','');
 
 -- FLAW 4: Storing plain text passwords in the database
 -- OWASP TOP 10 RISK: A2:2017 - Broken Authentication
