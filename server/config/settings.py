@@ -12,25 +12,33 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '_#h3^7@u)4ry6p@q_%uh%0tdah_47*k0it0pobh%p-c_2b=u0n'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# FLAW 5: Security Misconfiguration
+# This flaw has two different parts / flaws
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+# 1. Debug Mode Enabled in Production: The DEBUG = True setting in a production environment may expose sensitive information and error details to users, 
+# potentially aiding attackers in understanding system vulnerabilities or obtaining critical data. 
+# It's recommended to set DEBUG = False in production for security reasons.
+
+# 2. Empty Allowed Hosts List: The ALLOWED_HOSTS variable is an important security setting that specifies which hosts or domains can access the Django application. 
+# Leaving this list empty (ALLOWED_HOSTS = []) in a production environment allows any host to send requests to the application, 
+# leaving it vulnerable to Host Header attacks or unauthorized access. 
+# It's crucial to define specific hosts that should be allowed to interact with the application.
+
+# To fix these issues its important to set DEBUG to False (DEBUG = False) and to add the wanted domains or IP-addresses to the ALLOWED_HOSTS list.
+# For example ALLOWED_HOSTS = [192.168.1.133]. I want my messenger to be accesssable to only people in my network.
+# With this change, now the only people who can access the Messenger application are people using my network. 
+
 SESSION_COOKIE_HTTPONLY = False
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,8 +85,7 @@ LOGIN_REDIRECT_URL = '/'
 SESSION_COOKIE_SAMESITE = None
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -88,8 +95,7 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -107,8 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -121,7 +126,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
 
 STATIC_URL = '/static/'

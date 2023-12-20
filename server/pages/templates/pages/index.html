@@ -9,8 +9,6 @@
 		<h1>Welcome to Jesse's Messanger</h1>
 
 		<p><strong>Welcome</strong> {{user.username}}</p>
-	
-
 
         <form action='logout/' method="POST">
 			{% csrf_token %}
@@ -35,7 +33,7 @@
 
         <form action='add/' method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            Who do you want the message to?
+            Who do you want to send the message to?
             <br>
             <select name="to">
             {% for user in users %}
@@ -49,35 +47,4 @@
         </form>
     </body>
 </html>
-
-<!-- FLAW 5: CSRF-tokens
-
-CSRF-tokens are not listed on the OWASP 'Top 10 Web Application Security Risks' list because frameworks are more secure nowdays. 
-Django for example requieres to use a CSRF-token on post-methods, without one the user gets an error. 
-
-It is impossible to show what a post method would look like without one, because without it the post-method will not work. 
-I will show where and how the token is implemented into this file.
-Here is the post-method to adding messages to the server and displaying them. 
-
-        <form action='add/' method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            Who do you want the message to?
-            <br>
-            <select name="to">
-            {% for user in users %}
-                <option style="margin-top: 10px;" value="{{user.username}}">{{user.username}}</option>
-            {% endfor %}
-            </select><br/>
-            <br>
-
-			<textarea name="content" cols="40" rows="5"></textarea><br/>
-            <input type="submit" value="Send"/>
-        </form>
-
-As we can see on row 63 we have the {% csrf_token %} . This makes sure that CSRF attacks are impossible.
-In this form the line generates a hidden input field containing a unique token. 
-This token is validated by Django's CSRF middleware when the form is submitted.
-If the token is missing or invalid, the request is rejected, preventing potential CSRF attacks.
-This was an example of the CSRF flaw. ->
-
 

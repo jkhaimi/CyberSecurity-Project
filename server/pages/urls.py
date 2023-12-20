@@ -6,4 +6,5 @@ urlpatterns = [
     path('add/', addView, name='add'),
     path('mail/', mailView, name='mail'),
     path('delete/<int:message_id>/', deleteMessageView, name='delete_message'),
+
 ]

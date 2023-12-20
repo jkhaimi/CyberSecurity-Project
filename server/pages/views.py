@@ -4,8 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import Message, Mail
 from django.db.models import Q
-import json
+from django.views.decorators.csrf import csrf_exempt
 
+
+
+@csrf_exempt # To fix flaw 4 remove this
 def mailView(request):
     Mail.objects.create(content=request.body.decode('utf-8'))
     print(request.body.decode('utf-8'))
@@ -14,6 +17,7 @@ def mailView(request):
 
 # Flaw 1: Injection
 @login_required
+@csrf_exempt # To fix flaw 4 remove this
 def addView(request):
     target = User.objects.get(username=request.POST.get('to'))
     Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
@@ -55,6 +59,7 @@ def addView(request):
 
 # FLAW 2: Insufficient access control in homePageView
 @login_required
+@csrf_exempt # To fix flaw 4 remove this
 def homePageView(request):
     messages = Message.objects.all() 
     users = User.objects.exclude(pk=request.user.id)
@@ -114,6 +119,7 @@ def homePageView(request):
 from django.shortcuts import redirect, get_object_or_404
 
 @login_required
+@csrf_exempt # To fix flaw 4 remove this
 def deleteMessageView(request, message_id):
     message = get_object_or_404(Message, pk=message_id)
 
@@ -122,22 +128,20 @@ def deleteMessageView(request, message_id):
 
     return redirect('home')
 
-# FLAW 4: Insufficient Logging and Monitoring
 
-# Currently, our application lacks logging and monitoring for security events.
-# Weak monitoring makes it harder to detect and respond to security incidents or unauthorized access attempts.
-# To improve, we will implement comprehensive logging mechanisms:
+# FLAW 4: CSRF-tokens
 
-# 1. Log important security-related events, like authentication failures, access control violations, or critical operations.
-# 2. Implement logging libraries or Django's built-in logging mechanisms to record these events.
-# 3. Regularly review logs, set up alerts for suspicious activities, and establish incident response procedures.
+# CSRF tokens, although not explicitly listed in the OWASP Top 10, play a crucial role in web application security. 
+# Frameworks like Django enforce CSRF protection by default for POST methods. 
+# This mechanism helps prevent Cross-Site Request Forgery (CSRF) attacks, ensuring that requests originate from trusted sources.
 
-import logging
+# Using @csrf_exempt in Django views poses a security risk by bypassing this built-in CSRF protection.
+# When a view is marked as exempt from CSRF checks, it allows requests to be processed without requiring the CSRF token, 
+# opening the door to potential CSRF attacks.
 
-logger = logging.getLogger('security_logger')
-logger.info('Authentication success/failure')
-logger.warning('Access control violation detected')
+# To fix this issue and ensure proper CSRF protection:
 
-# Note: The example above represents basic logging; adjust and extend it based on your application's needs and security requirements.
+# Avoid Using @csrf_exempt and remove the @csrf_exempt decorator from views whenever possible. 
+# Only exempt views from CSRF protection when absolutely necessary.
 
-# ... (existing code)
+# So in our application, to fix the flaw we need to delete the @csrf_exempt tokens from the mailView, addView, homePageView and the deleteMessageView views.
