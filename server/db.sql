@@ -78,29 +78,6 @@ INSERT INTO auth_user VALUES(1,'pbkdf2_sha256$180000$TBOH2yAWx4qE$F586qFabIZ/etS
 INSERT INTO auth_user VALUES(2,'pbkdf2_sha256$180000$aaWhCT3CauGc$tlkGWtghox6+oHaDY4MXTaZYJJXWFhsoGyJAqRhc/uc=','2023-11-23 23:04:56.403371',0,'matti','','',0,1,'2023-11-23 23:04:45.060969','');
 INSERT INTO auth_user VALUES(3,'pbkdf2_sha256$180000$0SeOG8geIg2K$GoBx2OHi5IE8yAmWBPxu77SaINCL9VnBuf+Z6vsztcE=','2023-11-23 23:04:56.403371',0,'teppo','','',0,1,'2023-11-23 23:04:56.025654','');
 
-INSERT INTO auth_user VALUES(4,'kissa','2023-11-23 23:04:56.403371',0,'jesse','','',0,1,'2020-07-18 23:04:56.025654','');
-
--- FLAW 4: Storing plain text passwords in the database
--- OWASP TOP 10 RISK: A2:2017 - Broken Authentication
-
--- Here is an example of the Broken Authentication flaw. In the line above a user named Jesse is added with the password 'kissa'.
--- If an attacker gets access to the database they can steal user information very easily. 
--- This is why the password should be hashed using a secure hashing algorithm before adding it to the database.
--- We can use a safe hashing algorithm such as bcrypt or PBKDF2. 
--- This ensures that even if the database is leaked or gets in the hands of wrong people, the passwords of users are not compromised.
--- Or atleast not compromised instantly, because uncyphering a strong hashing algorithm is extremely hard.
-
--- This was an example of the Broken Authentication flaw. Here is how the adding of a user to the database should look like:
-
-INSERT INTO auth_user VALUES(4,'pbkdf2_sha256$180000$WzM0Iz7nTJuh0v9M9N3tg$64a2a1a4c84c36ca31e3b9585d5c1a20ed5ed78d8c47d24b016d3729b6a4d0b5','2023-11-23 12:35:11.851045',0,'','','',1,1,'2023-11-23 23:04:56.025654','');
-
--- In this example we used the PBKDF2 and the SHA256 hashing algorithms, combining algorithms gives even more security to passwords.
--- The number of iterations done to the password is 180000. With this hashing algorithm the password kissa is hashed into:
--- pbkdf2_sha256$180000$WzM0Iz7nTJuh0v9M9N3tg$64a2a1a4c84c36ca31e3b9585d5c1a20ed5ed78d8c47d24b016d3729b6a4d0b5
--- Now even if the database is compromised the password is relatively safe. 
-
-DELETE FROM auth_user WHERE id = 3;
-
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('django_migrations',19);
 INSERT INTO sqlite_sequence VALUES('django_admin_log',2);

@@ -6,67 +6,49 @@ from .models import Message, Mail
 from django.db.models import Q
 import json
 
-# FLAW 1-1: No input validation in mailView, leading to potential injection
 def mailView(request):
-    Mail.objects.create(content=request.body.decode('utf-8'))  # Vulnerable to injection attacks
+    Mail.objects.create(content=request.body.decode('utf-8'))
     print(request.body.decode('utf-8'))
     return HttpResponse('')
 
-	# The solution to this flaw is to sanitize and validate the received content before storing it. 
-	# We can do this by adding a length limit to the content. 
-	# We can do this for example adding a new variable named sanitized_content before we create the Mail objects.
-	# Which would look like this: 
 
-	# sanitized_content = request.body.decode('utf-8')[:255]
-
-	# In the line we add a length limit to the content with the [:255] part, which limits the length to 255 charecters.
-	# After that we create the message or the Mail.Object normally with this line:
-
-	# Mail.objects.create(content=sanitized_content)
-
-	# And then we can print it and return it. This was an example of the injection flaw.
-	# Here is what the code should look like to avoid possible injections:
-
-# def mailView(request):
-#     sanitized_content = request.body.decode('utf-8')[:255]
-#     Mail.objects.create(content=sanitized_content)
-#     print(sanitized_content)
-#     return HttpResponse('')
-
-
-
-
-# FLAW 1-2: Lack of input validation and sanitation in addView
+# Flaw 1: Injection
 @login_required
 def addView(request):
     target = User.objects.get(username=request.POST.get('to'))
     Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
     return redirect('/')
 
-		# Here is another example of the injection flaw. In the addView function there is no validation for the 'to' and 'content' parameters. 
-		# The solution to this flaw is to validate and sanitize the parameters in question before processing.
-		# This can be done for example with variables that look like this:
+	# Here is an example of the Injection flaw. In the addView function is vulnerable to injection attacks. 
+	# The attacker would attempt to inject malicious SQL code through the request.POST.get('to') parameter. 
+	# In the case of SQL injection, the attacker might use a payload that alters the intended SQL query's behavior.
+	# The attacker can use an attack payload like this:
 
-		# target_username = request.POST.get('to')
-		# content = request.POST.get('content')
+	# curl -X POST locahost:8000/addView -d "to=' OR 1=1 -- " -d "content=I`Content to be injected"
 
-		# After this we add a if sentence to check if the 'to' user exists and we validate the content length like in the example before.
-		# If the 'to' user exists and the content length is acceptable, then we create the message and return it.
-		# This was the second part of the example of the injection flaw. Here is what the code should look like to avoid the possible injenctions:
+	# The payload tricks the query to always evaluate to true with the '1=1' snippet.
+	# The payload injected into the to parameter could result in a query that retrieves unintended data or performs unintended operations,
+	# because it tricks the SQL query to behave unexpectedly due to the injected SQL code.
 
+	# To fix this security flaw the code should look like this:
 
 # @login_required
 # def addView(request):
-#     target_username = request.POST.get('to')
-#     content = request.POST.get('content')
-    
-#     if target_username and len(content) <= 255:
+#     username = request.POST.get('to')
+#     if username is not None:
 #         try:
-#             target = User.objects.get(username=target_username)
-#             Message.objects.create(source=request.user, target=target, content=content)
+#             target = User.objects.get(username=username)
+#             Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
 #         except User.DoesNotExist:
-#             pass 
+#             pass
 #     return redirect('/')
+
+# Here we use parameterized queries through Django's ORM (object-relational mapping layer). 
+# The key difference lies in how the user input is handled and processed. 
+# The secure code validates and handles the input before using it in the query, 
+# while the original code directly uses the input without explicit validation, 
+# It doesn't directly inject the raw username into the query. Instead, it validates the input and then utilizes it in a safe manner, 
+# reducing the risk of a SQL injection.
 
 
 
@@ -139,3 +121,23 @@ def deleteMessageView(request, message_id):
         message.delete()
 
     return redirect('home')
+
+# FLAW 4: Insufficient Logging and Monitoring
+
+# Currently, our application lacks logging and monitoring for security events.
+# Weak monitoring makes it harder to detect and respond to security incidents or unauthorized access attempts.
+# To improve, we will implement comprehensive logging mechanisms:
+
+# 1. Log important security-related events, like authentication failures, access control violations, or critical operations.
+# 2. Implement logging libraries or Django's built-in logging mechanisms to record these events.
+# 3. Regularly review logs, set up alerts for suspicious activities, and establish incident response procedures.
+
+import logging
+
+logger = logging.getLogger('security_logger')
+logger.info('Authentication success/failure')
+logger.warning('Access control violation detected')
+
+# Note: The example above represents basic logging; adjust and extend it based on your application's needs and security requirements.
+
+# ... (existing code)
