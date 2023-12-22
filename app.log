@@ -1,0 +1,67 @@
+INFO 2023-12-22 13:38:47,327 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:38:55,162 basehttp "POST /delete/48/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:38:55,180 basehttp "GET / HTTP/1.1" 200 3275
+INFO 2023-12-22 13:38:57,251 basehttp "POST /delete/46/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:38:57,262 basehttp "GET / HTTP/1.1" 200 2773
+INFO 2023-12-22 13:38:58,901 basehttp "POST /delete/47/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:38:58,912 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:39:05,772 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:39:05,784 basehttp "GET / HTTP/1.1" 200 2773
+INFO 2023-12-22 13:40:38,039 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:40:44,794 basehttp "POST /delete/49/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:40:44,811 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:40:46,599 basehttp "POST /delete/21/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:40:46,606 basehttp "GET / HTTP/1.1" 200 1769
+INFO 2023-12-22 13:40:50,727 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:40:50,739 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:45:26,932 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/config/settings.py changed, reloading.
+INFO 2023-12-22 13:45:27,271 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:45:38,484 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 13:45:38,728 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:45:46,885 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 13:45:47,153 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:45:55,104 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:45:59,365 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:46:06,543 basehttp "POST /delete/50/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:46:06,554 basehttp "GET / HTTP/1.1" 200 1769
+INFO 2023-12-22 13:46:11,757 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:46:11,786 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:46:29,929 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/config/settings.py changed, reloading.
+INFO 2023-12-22 13:46:30,222 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:49:08,770 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 13:49:09,049 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:49:15,113 basehttp "POST /delete/51/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:49:15,123 basehttp "GET / HTTP/1.1" 200 1769
+INFO 2023-12-22 13:49:19,428 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:49:19,442 basehttp "GET / HTTP/1.1" 200 2271
+INFO 2023-12-22 13:56:10,362 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 13:56:10,648 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:56:21,672 basehttp "POST /delete/52/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:56:21,688 basehttp "GET / HTTP/1.1" 200 1769
+2023-12-22 13:56:24,984 - server.pages.views - INFO - Sensitive content: menee hermo
+INFO 2023-12-22 13:56:24,988 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:56:25,005 basehttp "GET / HTTP/1.1" 200 2277
+INFO 2023-12-22 13:59:33,932 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 13:59:34,201 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 13:59:39,737 basehttp "POST /delete/53/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:59:39,746 basehttp "GET / HTTP/1.1" 200 1769
+2023-12-22 13:59:44,100 - server.pages.views - CRITICAL - Sensitive content: Tärkeetä
+INFO 2023-12-22 13:59:44,106 basehttp "POST /add/ HTTP/1.1" 302 0
+INFO 2023-12-22 13:59:44,116 basehttp "GET / HTTP/1.1" 200 2276
+INFO 2023-12-22 14:01:56,330 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 14:01:56,622 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 14:02:37,326 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 14:02:37,617 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 14:02:41,724 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/pages/views.py changed, reloading.
+INFO 2023-12-22 14:02:41,876 autoreload Watching for file changes with StatReloader
+INFO 2023-12-22 14:02:52,091 autoreload /Users/admin/Desktop/Koulu/ohjelmistoturvallisuus/CyberSecurity-Project/server/config/settings.py changed, reloading.
+2023-12-22 14:03:08,630 - server.pages.views - CRITICAL - User alice sent sensitive content: Moi
+2023-12-22 14:05:48,000 - CRITICAL - User alice sent sensitive content: Miu
+2023-12-22 14:06:10,765 - User alice sent sensitive content: Mau
+2023-12-22 14:17:55,470 - User alice sent sensitive to admin with content: Testi
+2023-12-22 14:32:19,811 - alice send a message to admin with content: A test for the teacher
+2023-12-22 14:36:54,916 - kissa
+2023-12-22 14:40:23,208 - alice deleted a message to admin with content: Moi
+2023-12-22 14:42:42,460 - alice send a message to admin with content: Testi
+2023-12-22 14:43:07,010 - alice deleted a message to admin with content: Testi
+2023-12-22 14:43:13,131 - alice send a message to admin with content: Testi

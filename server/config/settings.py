@@ -34,11 +34,11 @@ ALLOWED_HOSTS = []
 # It's crucial to define specific hosts that should be allowed to interact with the application.
 
 # To fix these issues its important to set DEBUG to False (DEBUG = False) and to add the wanted domains or IP-addresses to the ALLOWED_HOSTS list.
-# For example ALLOWED_HOSTS = [192.168.1.133]. I want my messenger to be accesssable to only people in my network.
+# For example ALLOWED_HOSTS = [192.168.1.133]. 
+# I want my messenger to be accesssable to only people in my network.
 # With this change, now the only people who can access the Messenger application are people using my network. 
 
 SESSION_COOKIE_HTTPONLY = False
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+# ... (other settings)
 
 
 LANGUAGE_CODE = 'en-us'
@@ -129,3 +129,4 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+

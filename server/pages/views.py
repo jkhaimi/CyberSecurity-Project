@@ -6,55 +6,47 @@ from .models import Message, Mail
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 
+# FLAW 1: Insufficient Logging & Monitoring
+
+# Here is an example of the Insufficient Logging & Monitoring flaw. 
+# We added clear logging to all the user actions in the application.
+# Now all the messages the users send and delete are logged to a file named app.log where I the admin can see if any suspicious activity is occuring. 
+# With secure and clear logging we can provide visibility into what's happening within the application.
+# Especially regarding sensitive operations like user actions and content. 
+
+# Here is how we want to implement the logging into our application
+
+# import logging
+
+# logger = logging.getLogger(__name__)
+
+# file_handler = logging.FileHandler('app.log')
+# formatter = logging.Formatter('%(asctime)s - %(message)s')
+# file_handler.setFormatter(formatter)
+
+# logger.addHandler(file_handler)
+# logger.setLevel(logging.CRITICAL)
+
+# With this we create a file named app.log where we log the created and deleted messages.
 
 
-@csrf_exempt # To fix flaw 4 remove this
+
+@csrf_exempt
 def mailView(request):
     Mail.objects.create(content=request.body.decode('utf-8'))
-    print(request.body.decode('utf-8'))
     return HttpResponse('')
 
 
-# Flaw 1: Injection
 @login_required
-@csrf_exempt # To fix flaw 4 remove this
+@csrf_exempt
 def addView(request):
     target = User.objects.get(username=request.POST.get('to'))
+
+	# Add this line to fix flaw 1
+    # logger.critical('%s send a message to %s with content: %s', request.user.username, target, request.POST.get('content'))
+    
     Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
     return redirect('/')
-
-	# Here is an example of the Injection flaw. In the addView function is vulnerable to injection attacks. 
-	# The attacker would attempt to inject malicious SQL code through the request.POST.get('to') parameter. 
-	# In the case of SQL injection, the attacker might use a payload that alters the intended SQL query's behavior.
-	# The attacker can use an attack payload like this:
-
-	# curl -X POST locahost:8000/addView -d "to=' OR 1=1 -- " -d "content=I`Content to be injected"
-
-	# The payload tricks the query to always evaluate to true with the '1=1' snippet.
-	# The payload injected into the to parameter could result in a query that retrieves unintended data or performs unintended operations,
-	# because it tricks the SQL query to behave unexpectedly due to the injected SQL code.
-
-	# To fix this security flaw the code should look like this:
-
-# @login_required
-# def addView(request):
-#     username = request.POST.get('to')
-#     if username is not None:
-#         try:
-#             target = User.objects.get(username=username)
-#             Message.objects.create(source=request.user, target=target, content=request.POST.get('content'))
-#         except User.DoesNotExist:
-#             pass
-#     return redirect('/')
-
-# Here we use parameterized queries through Django's ORM (object-relational mapping layer). 
-# The key difference lies in how the user input is handled and processed. 
-# The secure code validates and handles the input before using it in the query, 
-# while the original code directly uses the input without explicit validation, 
-# It doesn't directly inject the raw username into the query. Instead, it validates the input and then utilizes it in a safe manner, 
-# reducing the risk of a SQL injection.
-
-
 
 
 # FLAW 2: Insufficient access control in homePageView
@@ -124,9 +116,17 @@ def deleteMessageView(request, message_id):
     message = get_object_or_404(Message, pk=message_id)
 
     if request.user == message.source or request.user == message.target:
+
+		# Add these lines to fix flaw 1
+        # target_username = message.target.username
+        # message_content = message.content
+        # logger.critical('%s deleted a message to %s with content: %s', request.user.username, target_username, message_content)
+
         message.delete()
 
     return redirect('home')
+
+
 
 
 # FLAW 4: CSRF-tokens
